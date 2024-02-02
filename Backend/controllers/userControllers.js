@@ -1,7 +1,10 @@
 const User = require('../models/userModel');
 const HttpError = require('../models/errorModel');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const path = require('path');
+const {v4: uuid} = require('uuid');
 
 // =================REGISTER A NEW USER
 // POST: api/users/register
@@ -39,7 +42,7 @@ const registerUser = async (req, res, next) => {
 			password: hashedPass,
 		});
 
-		res.status(201).json(`New user ${newUser.email} registered.`)
+		res.status(201).json(`New user ${newUser.email} registered.`);
 	} catch (err) {
 		return next(new HttpError('User Registration failed', 422));
 	}
@@ -51,29 +54,33 @@ const registerUser = async (req, res, next) => {
 
 const loginUser = async (req, res, next) => {
 	try {
-		const {email,password} = req.body
+		const { email, password } = req.body;
 		if (!email || !password) {
 			return next(new HttpError('Fill in all fields', 422));
 		}
-		
-		const newEmail = email.toLowerCase()
-		
-		const user = await User.findOne({email:newEmail})
+
+		const newEmail = email.toLowerCase();
+
+		const user = await User.findOne({ email: newEmail });
 		if (!user) {
 			return next(new HttpError('Invalid credentials', 422));
 		}
-		
-		const comparePass = await bcrypt.compare(password, user.password)
+
+		const comparePass = await bcrypt.compare(password, user.password);
 		if (!comparePass) {
 			return next(new HttpError('Invalid credentials', 422));
 		}
 
-		const {_id: id, name} = user;
-		const token = jwt.sign({id,name},process.env.JWT_SECRET,{expiresIn:"1d"})
+		const { _id: id, name } = user;
+		const token = jwt.sign({ id, name }, process.env.JWT_SECRET, {
+			expiresIn: '1d',
+		});
 
-		res.status(200).json({token,id,name})
+		res.status(200).json({ token, id, name });
 	} catch (err) {
-		return next(new HttpError('Login failed. Please check your credentials.', 422));
+		return next(
+			new HttpError('Login failed. Please check your credentials.', 422)
+		);
 	}
 };
 
@@ -83,13 +90,13 @@ const loginUser = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
 	try {
-		const {id} = req.params
-		const user = await User.findById(id).select('-password')
-		if(!user){
-			return next(new HttpError('User not found.',404));
+		const { id } = req.params;
+		const user = await User.findById(id).select('-password');
+		if (!user) {
+			return next(new HttpError('User not found.', 404));
 		}
 
-		res.status(200).json(user)
+		res.status(200).json(user);
 	} catch (err) {
 		return next(new HttpError(err));
 	}
@@ -100,7 +107,58 @@ const getUser = async (req, res, next) => {
 //PROTECTED
 
 const changeAvatar = async (req, res, next) => {
-	res.json('change avatar');
+	try {
+		if (!req.files.avatar) {
+			return next(new HttpError('Please choose an image.', 422));
+		}
+
+		// find user from database
+		const user = await User.findById(req.user.id);
+		// delete old avatar if exists
+		if (user.avatar) {
+			fs.unlink(path.join(__dirname, '..', 'uploads', user.avatar), (err) => {
+				if (err) {
+					return next(new HttpError(err));
+				}
+			});
+		}
+
+		const {avatar} = req.files;
+
+		// check file size
+		if (avatar.size > 1000000) {
+			return next(
+				new HttpError('Profile picture too big. Should be less than 1mb', 422)
+			);
+		}
+
+		let filename;
+		filename = avatar.name;
+		let splittedFilename = filename.split('.');
+		let newFilename =
+			splittedFilename[0] +
+			uuid() +
+			'.' +
+			splittedFilename[splittedFilename.length - 1];
+		avatar.mv(
+			path.join(__dirname, '..', 'uploads', newFilename),
+			async (err) => {
+				if (err) {
+					return next(new HttpError(err));
+				}
+				const updatedAvatar = await User.findByIdAndUpdate(
+					req.user.id,
+					{ avatar: newFilename },
+					{ new: true }
+				);
+				if (!updatedAvatar) {
+					new HttpError("Avatar couldn't be changed", 422);
+				}
+				res.status(200).json(updatedAvatar);
+			});
+	} catch (err) {
+		return next(new HttpError(err));
+	}
 };
 
 // =================EDIT USER
@@ -117,8 +175,8 @@ const editUser = async (req, res, next) => {
 
 const getAuthors = async (req, res, next) => {
 	try {
-		const authors = await User.find().select('-password')
-		res.status(200).json(authors)
+		const authors = await User.find().select('-password');
+		res.status(200).json(authors);
 	} catch (err) {
 		return next(new HttpError(err));
 	}
