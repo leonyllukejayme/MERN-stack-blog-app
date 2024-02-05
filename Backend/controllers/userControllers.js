@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
-const {v4: uuid} = require('uuid');
+const { v4: uuid } = require('uuid');
 
 // =================REGISTER A NEW USER
 // POST: api/users/register
@@ -123,7 +123,7 @@ const changeAvatar = async (req, res, next) => {
 			});
 		}
 
-		const {avatar} = req.files;
+		const { avatar } = req.files;
 
 		// check file size
 		if (avatar.size > 1000000) {
@@ -155,7 +155,8 @@ const changeAvatar = async (req, res, next) => {
 					new HttpError("Avatar couldn't be changed", 422);
 				}
 				res.status(200).json(updatedAvatar);
-			});
+			}
+		);
 	} catch (err) {
 		return next(new HttpError(err));
 	}
@@ -166,7 +167,53 @@ const changeAvatar = async (req, res, next) => {
 //PROTECTED
 
 const editUser = async (req, res, next) => {
-	res.json('edit user details');
+	try {
+		const { name, email, currentPassword, newPassword, confirmNewPassword } =
+			req.body;
+		if (!name || !email || !currentPassword || !newPassword) {
+			return next(new HttpError('Fill in all fields', 422));
+		}
+
+		// get user from database
+		const user = await User.findById(req.user.id);
+		if (!user) {
+			return next(new HttpError('User not found', 403));
+		}
+
+		// make sure new email doesn't already exist
+		const emailExist = await User.findOne({ email });
+		// we want to update other details with/without changing the email (which is a unique id because we use it to login).
+		if (emailExist && emailExist._id != req.user.id) {
+			return next(new HttpError('Email already exist', 422));
+		}
+		//compare current password to db password
+		const validateUserPassword = await bcrypt.compare(
+			currentPassword,
+			user.password
+		);
+		if (!validateUserPassword) {
+			return next(new HttpError('Invalid current password', 422));
+		}
+
+		//compare new passwords
+		if (newPassword !== confirmNewPassword) {
+			return next(new HttpError('New Passwords do not match', 422));
+		}
+
+		// hash new password
+		const salt = await bcrypt.genSalt(10);
+		const hashedPass = await bcrypt.hash(newPassword, salt);
+
+		//update user info in database
+		const newInfo = await User.findByIdAndUpdate(
+			req.user.id,
+			{ name, email, password: hashedPass },
+			{ new: true }
+		);
+		res.status(200).json(newInfo)
+	} catch (err) {
+		return next(new HttpError(err));
+	}
 };
 
 // =================GET AUTHORS
