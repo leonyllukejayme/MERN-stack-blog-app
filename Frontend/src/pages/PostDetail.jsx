@@ -9,8 +9,8 @@ const PostDetail = () => {
         <div className="post-detail__header">
           <PostAuthor />
           <div className="post-detail__buttons">
-            <Link to={`/posts/a/edit`} className='btn sm primary'>Edit</Link>
-            <Link to={`/posts/a/delete`} className='btn sm primary danger'>Delete</Link>
+            <Link to={`/posts/edit/a`} className='btn sm primary'>Edit</Link>
+            <Link to={`/posts/delete/a`} className='btn sm primary danger'>Delete</Link>
           </div>
         </div>
         <h1>This is a Post Title</h1>
