@@ -85,7 +85,7 @@ h5 {
 section {
 	margin-top: 6rem;
 }
-button{
+button {
 	border: none;
 }
 
@@ -363,7 +363,7 @@ textarea {
 }
 
 /* custom style for react quill */
-.ql-editor{
+.ql-editor {
 	overflow: scroll;
 	background: var(--color-white);
 	height: 10rem !important;
@@ -402,20 +402,19 @@ textarea {
 	margin-top: 1rem;
 }
 
-
 /* ---------------------------------Profile------------------------------------------- */
 
-.profile__container{
+.profile__container {
 	display: grid;
 	place-items: center;
 	text-align: center;
 }
 
-.profile__details{
+.profile__details {
 	width: 100%;
 }
 
-.avatar__wrapper{
+.avatar__wrapper {
 	width: 15rem;
 	aspect-ratio: 1/1;
 	position: relative;
@@ -423,18 +422,19 @@ textarea {
 	margin-top: 1rem;
 }
 
-.profile__avatar{
+.profile__avatar {
 	height: 100%;
 	border-radius: var(--radius-5);
 	border: 1rem solid var(--color-white);
 	overflow: hidden;
 }
 
-.avatar__form input{
+.avatar__form input {
 	visibility: hidden;
 }
 
-.avatar__form label, .profile__avatar-btn{
+.avatar__form label,
+.profile__avatar-btn {
 	background: var(--color-gray-900);
 	color: var(--color-white);
 	font-size: 1.5rem;
@@ -448,33 +448,32 @@ textarea {
 	border-radius: 50%;
 }
 
-.profile__avatar-btn{
+.profile__avatar-btn {
 	cursor: pointer;
 	padding: 0;
 	font-size: 1.5rem;
 	background: var(--color-primary);
 }
 
-.profile__details h1{
+.profile__details h1 {
 	margin-top: 1.5rem;
 }
 
-.form.profile__form{
+.form.profile__form {
 	margin-top: 3rem;
 	margin-inline: auto;
 	width: var(--form-width);
 }
 
-
 /* --------------------------Dashboard----------------------------- */
 
-.dashboard__container{
+.dashboard__container {
 	display: flex;
 	flex-direction: column;
 	gap: 0.7rem;
 }
 
-.dashboard__post{
+.dashboard__post {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -484,47 +483,45 @@ textarea {
 	border-radius: var(--radius-3);
 }
 
-.dashboard__post-info{
+.dashboard__post-info {
 	display: flex;
 	gap: 2rem;
 	width: 100%;
 	align-items: center;
 }
 
-.dashboard__post-thumbnail{
+.dashboard__post-thumbnail {
 	width: 4rem;
 	border-radius: var(--radius-1);
 	overflow: hidden;
 }
 
-.dashboard__post-actions{
+.dashboard__post-actions {
 	display: flex;
 	gap: 1rem;
 }
 
-
 /* ----------------------------Media Queries (Small Devices)------------------------------ */
 
-
 @media screen and (max-width: 800px) {
-	h1{
+	h1 {
 		font-size: 2rem;
 	}
-	h2{
+	h2 {
 		font-size: 1.6rem;
 	}
-	h3{
+	h3 {
 		font-size: 1.35rem;
 	}
 
-	.container{
+	.container {
 		width: var(--container-width-md);
 	}
 	/* Navbar */
-	.nav__container{
+	.nav__container {
 		position: relative;
 	}
-	.nav__menu{
+	.nav__menu {
 		position: absolute;
 		top: 5rem;
 		right: 0;
@@ -532,7 +529,7 @@ textarea {
 		gap: 0;
 	}
 
-	.nav__menu li{
+	.nav__menu li {
 		width: 100%;
 		box-shadow: -2rem 4rem 4rem rgba(0, 0, 0, 0.26);
 		animation: dropDown 500ms ease forwards;
@@ -541,77 +538,111 @@ textarea {
 	}
 
 	@keyframes dropDown {
-		to{
+		to {
 			opacity: 1;
 			transform: rotateX(0);
 		}
 	}
 
-	.nav__menu li:nth-child(2){
+	.nav__menu li:nth-child(2) {
 		animation-delay: 300ms;
 	}
-	.nav__menu li:nth-child(3){
+	.nav__menu li:nth-child(3) {
 		animation-delay: 600ms;
 	}
-	.nav__menu li:nth-child(4){
+	.nav__menu li:nth-child(4) {
 		animation-delay: 900ms;
 	}
-	
 
-	.nav__menu li a{
+	.nav__menu li a {
 		display: block;
 		background: var(--color-white);
 		padding: 0.85rem 2.5rem;
 	}
-	.nav__toggle-btn{
+	.nav__toggle-btn {
 		display: inline-block;
 		background: transparent;
 		font-size: 1.5rem;
 		cursor: pointer;
 	}
 
-	
-	.posts__container{
+	.posts__container {
 		grid-template-columns: 1fr;
 		gap: 1rem;
 	}
 
-	.footer__categories{
+	.footer__categories {
 		flex-direction: column;
 	}
 
-	.post-detail{
+	.post-detail {
 		width: 100%;
 		background: transparent;
 		padding: 0;
 	}
 
-	.post-detail h1{
+	.post-detail h1 {
 		margin-top: 1rem;
 	}
 
-	.register, .login, .create-post{
+	.register,
+	.login,
+	.create-post {
 		width: 100%;
 	}
 
-	.form.form.profile__form{
+	.form.form.profile__form {
 		margin-top: 2.5rem;
 		width: 100%;
 	}
 
-	.authors__container{
+	.authors__container {
 		grid-template-columns: 1fr;
 		gap: 1.2rem;
 	}
 
-	.dashboard__post{
+	.dashboard__post {
 		flex-direction: column;
 	}
-	.dashboard__post-info{
+	.dashboard__post-info {
 		gap: 1.5rem;
 	}
 
-	.dashboard__post-thumbnail{
+	.dashboard__post-thumbnail {
 		width: 5rem;
+	}
+}
+
+/* -----------------------Loader --------------------------*/
+
+.container-loader {
+	display: grid;
+	place-items: center;
+	height: 110vh;
+}
+
+.loader {
+	width: 5%;
+	aspect-ratio: 1;
+	display: grid;
+	animation: l14 4s infinite;
+}
+.loader::before,
+.loader::after {
+	content: '';
+	grid-area: 1/1;
+	border: 8px solid;
+	border-radius: 50%;
+	border-color: red red #0000 #0000;
+	mix-blend-mode: darken;
+	animation: l14 1s infinite linear;
+}
+.loader::after {
+	border-color: #0000 #0000 blue blue;
+	animation-direction: reverse;
+}
+@keyframes l14 {
+	100% {
+		transform: rotate(1turn);
 	}
 }

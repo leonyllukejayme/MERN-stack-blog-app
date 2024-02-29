@@ -2,13 +2,13 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import PostAuthor from './PostAuthor'
 
-const PostItem = ({postID,category,title,desc,authorID,thumbnail}) => {
-    const shortDescription = desc.length > 145 ? desc.substr(0,145)+'...' : desc;
+const PostItem = ({postID,category,title,description,authorID,thumbnail,createdAt}) => {
+    const shortDescription = description.length > 145 ? description.substr(0,145)+'...' : description;
     const postTitle = title.length > 30 ? title.substr(0,30)+'...' : title;
   return (
     <article className="post">
         <div className="post__thumbnail">
-            <img src={thumbnail} alt={title} />
+            <img src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${thumbnail}`} alt={title} />
         </div>
         <div className="post__content">
             <Link to={`/posts/${postID}`}>
@@ -16,7 +16,7 @@ const PostItem = ({postID,category,title,desc,authorID,thumbnail}) => {
             </Link>
             <p>{shortDescription}</p>
             <div className="post__footer">
-                <PostAuthor />
+                <PostAuthor authorID={authorID} createdAt={createdAt}/>
                 <Link to={`/posts/categories/${category}`} className='btn category' >{category}</Link>
             </div>
         </div>
