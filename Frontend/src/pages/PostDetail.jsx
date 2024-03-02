@@ -1,5 +1,4 @@
 import { Link, useParams } from 'react-router-dom';
-import blog1 from '../images/blog1.jpg';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/userContext';
 import Loader from '../components/Loader';
@@ -42,7 +41,7 @@ const PostDetail = () => {
 						<PostAuthor authorID={post.creator} createdAt={post.createdAt}/>
 						{currentUser?.id == post?.creator && (
 							<div className="post-detail__buttons">
-								<Link to={`/posts/edit/a`} className="btn sm primary">
+								<Link to={`/posts/${post?._id}/edit/`} className="btn sm primary">
 									Edit
 								</Link>
 								<DeletePost postId={id}/>
@@ -53,7 +52,7 @@ const PostDetail = () => {
 					<div className="post-detail__thumbnail">
 						<img src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${post.thumbnail}`} alt="" />
 					</div>
-          <p dangerouslySetInnerHTML={{__html:post.description}}></p>
+          <p dangerouslySetInnerHTML={{__html:post.description}}/>
 				</div>
 			)}
 		</section>

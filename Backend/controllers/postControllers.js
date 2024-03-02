@@ -127,7 +127,7 @@ const editPost = async (req, res, next) => {
 		// ReactQuill has a paragraph opening and closing tag with a break tag in between so there are 11 characters in there already.
 		if (!title || !category || description.length < 12) {
 			return next(
-				new HttpError('Fill in all fields and choose thumbnail.', 422)
+				new HttpError('Fill in all fields.', 422)
 			);
 		}
 		// get old post from database

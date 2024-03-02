@@ -646,3 +646,13 @@ textarea {
 		transform: rotate(1turn);
 	}
 }
+
+/* LuLoader2  */
+.rotate {
+	animation: rt 1s infinite linear;
+}
+@keyframes rt {
+	100%{
+		transform: rotate(360deg);
+	}
+}
