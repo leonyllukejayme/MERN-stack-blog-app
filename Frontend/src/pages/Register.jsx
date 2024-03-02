@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { LuLoader2 } from 'react-icons/lu';
 
 const Register = () => {
 	const [userData, setUserData] = useState({
@@ -10,6 +11,7 @@ const Register = () => {
 		password2: '',
 	});
 	const [error, setError] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
 
 	const changeInputHandler = (e) => {
@@ -21,6 +23,7 @@ const Register = () => {
 	const registerUser = async (e) => {
 		e.preventDefault();
 		setError('');
+		setIsLoading(true)
 		try {
 			const response = await axios.post(
 				`${import.meta.env.VITE_APP_BASE_URL}/users/register`,
@@ -35,6 +38,7 @@ const Register = () => {
 		} catch (err) {
 			setError(err.response.data.message);
 		}
+		setIsLoading(false)
 	};
 
 	return (
@@ -73,7 +77,7 @@ const Register = () => {
 						onChange={changeInputHandler}
 					/>
 					<button type="submit" className="btn primary">
-						Register
+						{isLoading?<LuLoader2 className='rotate'/> : "Register"}
 					</button>
 				</form>
 				<small>

@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/userContext';
 import axios from 'axios';
 import { LuLoader2 } from 'react-icons/lu';
+import blankProPic from '../assets/blank.png'
 
 const UserProfile = () => {
 	const [avatar, setAvatar] = useState('');
@@ -89,10 +90,7 @@ const UserProfile = () => {
 				<div className="profile__details">
 					<div className="avatar__wrapper">
 						<div className="profile__avatar">
-							<img
-								src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${avatar}`}
-								alt=""
-							/>
+							{!avatar ? <img src={blankProPic} alt="" />:<img src={`${import.meta.env.VITE_APP_ASSETS_URL}/uploads/${avatar}`} alt=""/>}
 						</div>
 						{/* Form to update avatar */}
 						<form className="avatar__form">
@@ -162,3 +160,4 @@ const UserProfile = () => {
 };
 
 export default UserProfile;
+
